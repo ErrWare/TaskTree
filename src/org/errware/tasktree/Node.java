@@ -1,7 +1,9 @@
+package org.errware.tasktree;
+
 import org.dreambot.api.methods.MethodContext;
 
 public abstract class Node {
-    protected String name;
+    private String name;
 
     public abstract int execute(MethodContext c, TaskTree t);
     public abstract boolean validate(MethodContext c, TaskTree t);
@@ -11,7 +13,7 @@ public abstract class Node {
     //but changing the String type within each class/class instance is hard?
     @Override
     public String toString(){
-        return name + super.toString();
+        return name + ":" + super.toString();
     }
 
 }
