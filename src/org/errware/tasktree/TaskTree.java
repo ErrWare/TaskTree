@@ -2,12 +2,18 @@ package org.errware.tasktree;
 
 import org.dreambot.api.methods.MethodContext;
 
+import java.util.ArrayList;
 import java.util.Stack;
 
 public abstract class TaskTree extends Node {
     protected Node root;
     protected Stack<Node> trace;
     protected MethodContext c;
+
+    protected ArrayList<Node> interruptHandler;
+    protected void interrupt(int interruptCode){
+        interruptHandler.get(interruptCode).execute(c,this);
+    }
 
     public TaskTree(MethodContext _c){_c.log("TaskTree reached");c=_c;}
 
