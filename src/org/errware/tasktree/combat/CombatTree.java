@@ -1,9 +1,10 @@
-package org.errware.tasktree;
+package org.errware.tasktree.combat;
 
-import org.dreambot.api.methods.MethodContext;
-import org.dreambot.api.methods.interactive.NPCs;
 import org.dreambot.api.wrappers.interactive.NPC;
 import org.dreambot.api.methods.filter.Filter;
+import org.errware.tasktree.AbstractNode;
+import org.errware.tasktree.Node;
+import org.errware.tasktree.TaskTree;
 
 
 public class CombatTree extends TaskTree {
@@ -14,9 +15,7 @@ public class CombatTree extends TaskTree {
     public void updateTargetNPC(int index){targetNPC = c.getNpcs().getLocalNPC(index);}
     public void updateTargetNPC(NPC npc){targetNPC=npc;}
     public NPC getTargetNPC(){return targetNPC;}
-    public CombatTree(MethodContext c){
-        super(c);
-    }
+    public CombatTree(){ }
     protected enum Phase{PREFIGHT, FIGHT, POSTFIGHT}
     Phase phase = Phase.PREFIGHT;
     boolean phaseValid = false; //keeps track of whether branches have been valid in the past or not
@@ -26,14 +25,12 @@ public class CombatTree extends TaskTree {
     protected Node[] phases = new Node[3];
     protected boolean foughtSinceEntrance;
 
-    public CombatTree(MethodContext c, Filter<NPC> f){
-        super(c);
+    public CombatTree( Filter<NPC> f){
         enterCombat = new TargetSelection(f);
         doCombat = new FightSequence();
         exitCombat = new CombatCleanup();
     }
-    public CombatTree(MethodContext c, Node n0, Node n1, Node n2){
-        super(c);
+    public CombatTree( Node n0, Node n1, Node n2){
         enterCombat = n0;
         doCombat = n1;
         exitCombat = n2;
@@ -43,14 +40,14 @@ public class CombatTree extends TaskTree {
         return "Combat Tree: " + super.toString();
     }
     @Override
-    public boolean validate(MethodContext c, TaskTree t){
+    public boolean validate( TaskTree t){
         t.traceNode(this);
         foughtSinceEntrance = false;
         c.log("Combat Tree Validated~~~~~~~~~~~~~");
         return true;
     }
     @Override
-    public boolean invalidate(MethodContext c, TaskTree t){
+    public boolean invalidate( TaskTree t){
         if(phase == Phase.PREFIGHT && foughtSinceEntrance){
             t.untraceNode();
             return true;
@@ -58,23 +55,23 @@ public class CombatTree extends TaskTree {
         return false;
     }
     @Override
-    public int execute(MethodContext c, TaskTree t){
+    public int execute(TaskTree t){
         //try each stage at least once
         c.log("Combat Node Executing");
         c.log("Phase val: " + phase);
         switch (phase) {
             case PREFIGHT:
                 c.log("Prefight! - phase valid? " + (phaseValid?"true":"false"));
-                if(phaseValid && enterCombat.invalidate(c,this)){
+                if(phaseValid && enterCombat.invalidate(this)){
                     c.log("Setting phase to FIGHT");
                     phase=Phase.FIGHT;
                     foughtSinceEntrance = true;
                     phaseValid = false;
                     return 10;
                 }
-                else if(phaseValid || enterCombat.validate(c, this)){
+                else if(phaseValid || enterCombat.validate(this)){
                     phaseValid = true;
-                    int targetIndex = enterCombat.execute(c,this);
+                    int targetIndex = enterCombat.execute(this);
                     c.log("Target Index: " + targetIndex);
                     if(targetIndex!=-1){
                         //npc targeted
@@ -85,26 +82,26 @@ public class CombatTree extends TaskTree {
                     return 250;
                 }
             case FIGHT:
-                if(phaseValid && doCombat.invalidate(c,this)){
+                if(phaseValid && doCombat.invalidate(this)){
                     phase=Phase.POSTFIGHT;
                     phaseValid = false;
                     //here we stop combat scribe
                     return 0;
                 }
                 //maybe don't even need doCombat.validate?
-                else if(phaseValid || doCombat.validate(c,this)){
+                else if(phaseValid || doCombat.validate(this)){
                     phaseValid = true;
                     //doCombat returns wait ms time - might be dependent on location in sequence
-                    return doCombat.execute(c,this);
+                    return doCombat.execute(this);
                 }
             case POSTFIGHT:
-                if(phaseValid && exitCombat.invalidate(c,this)){
+                if(phaseValid && exitCombat.invalidate(this)){
                     phaseValid = false;
                     phase=Phase.PREFIGHT;
                 }
-                else if(phaseValid || exitCombat.validate(c,this)){
+                else if(phaseValid || exitCombat.validate(this)){
                     phaseValid = true;
-                    return exitCombat.execute(c,this);
+                    return exitCombat.execute(this);
                 }
         }
         return 800;
@@ -127,7 +124,7 @@ public class CombatTree extends TaskTree {
 
     //exists is false when npc dead
     //realID is 0 when npc dead
-    protected class TargetSelection extends Node{
+    protected class TargetSelection extends AbstractNode {
         private Filter<NPC> npcFilter;
         private int targetIndex=-1;
         public int getTargetIndex(){return targetIndex;}
@@ -136,7 +133,7 @@ public class CombatTree extends TaskTree {
         }
 
         @Override
-        public int execute(MethodContext c, TaskTree t) {
+        public int execute(TaskTree t) {
             c.log("Combat Prefight if executed: " + !c.getLocalPlayer().isMoving());
             if(!c.getLocalPlayer().isMoving()) {
                 NPC monster = c.getNpcs().closest(npcFilter);
@@ -153,12 +150,12 @@ public class CombatTree extends TaskTree {
             return targetIndex;
         }
         @Override
-        public boolean validate(MethodContext c, TaskTree t){
+        public boolean validate(TaskTree t){
             return true;
         }
 
         @Override
-        public boolean invalidate(MethodContext c, TaskTree t) {
+        public boolean invalidate(TaskTree t) {
 
             //Exit target selection when in combat or target is dead, return true
             c.log("Invalidate pre 1: " + (c.getLocalPlayer().isInCombat()  ? "True" : "False"));
@@ -174,39 +171,39 @@ public class CombatTree extends TaskTree {
 
     //if overriden with a fightsequence tree it is recommended
     //that the invalidate be dependent on the emptiness of the trace
-    protected class FightSequence extends Node{
+    protected class FightSequence extends AbstractNode{
         @Override
-        public int execute(MethodContext c, TaskTree t) {
+        public int execute(TaskTree t) {
             return 1000;
         }
 
         @Override
-        public boolean validate(MethodContext c, TaskTree t) {
+        public boolean validate( TaskTree t) {
             return true;
         }
 
         @Override
-        public boolean invalidate(MethodContext c, TaskTree t) {
+        public boolean invalidate(TaskTree t) {
             //invalidate if target dead or out of combat
             return !((CombatTree)t).getTargetNPC().exists() || !c.getLocalPlayer().isInCombat();
         }
     }
 
-    protected class CombatCleanup extends ENode{
-
+    protected class CombatCleanup extends AbstractNode{
+        boolean flag;
         @Override
-        public int execute(MethodContext methodContext, TaskTree taskTree) {
+        public int execute( TaskTree taskTree) {
             return 0;
         }
 
         @Override
-        public boolean validate(MethodContext methodContext, TaskTree taskTree) {
+        public boolean validate(TaskTree taskTree) {
             flag=true;
             return true;
         }
 
         @Override
-        public boolean invalidate(MethodContext methodContext, TaskTree taskTree) {
+        public boolean invalidate( TaskTree taskTree) {
             if(flag){
                 flag = false;
                 return true;
