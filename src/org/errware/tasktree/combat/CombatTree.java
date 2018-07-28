@@ -7,6 +7,8 @@ import org.errware.tasktree.LooperNode;
 import org.errware.tasktree.Node;
 import org.errware.tasktree.TaskTree;
 
+import java.util.Stack;
+
 import static org.errware.tasktree.LooperNode.ExecutionType.INSISTENT;
 
 
@@ -20,15 +22,16 @@ public class CombatTree extends TaskTree {
     public void updateTargetNPC(int index){targetNPC = c.getNpcs().getLocalNPC(index);}
     public void updateTargetNPC(NPC npc){targetNPC=npc;}
     public NPC getTargetNPC(){return targetNPC;}
+
     public CombatTree(){ root = new LooperNode(INSISTENT); }
-    protected enum Phase{PREFIGHT, FIGHT, POSTFIGHT}
-    Phase phase = Phase.PREFIGHT;
-    boolean phaseValid = false; //keeps track of whether branches have been valid in the past or not
+    //protected enum Phase{PREFIGHT, FIGHT, POSTFIGHT}
+    //Phase phase = Phase.PREFIGHT;
+    //boolean phaseValid = false; //keeps track of whether branches have been valid in the past or not
                                 //if so we'll want to keep executing them even if the valid precondition
                                 //no longer holds - until invalid postcondition is true
                                 //just like in the ordinary execution of tasktrees
-    protected Node[] phases = new Node[3];
-    protected boolean foughtSinceEntrance;
+    //protected Node[] phases = new Node[3];
+    //protected boolean foughtSinceEntrance;
 
     public CombatTree( Filter<NPC> f){
         /*
@@ -36,29 +39,35 @@ public class CombatTree extends TaskTree {
         doCombat = new FightSequence();
         exitCombat = new CombatCleanup();
         */
-        root = new LooperNode(INSISTENT);
+        //I don't like having to specify the execution type last
+        //fix it
+        root = new LooperNode();
         root.add(new TargetSelection(f));
         root.add(new FightSequence());
         root.add(new CombatCleanup());
+        root.setExecutionType(INSISTENT);
+        trace = new Stack();
+        trace.push(root);
     }
     public CombatTree( TargetSelection ts, FightSequence fs, CombatCleanup cc){
-        root = new LooperNode(INSISTENT);
+        root = new LooperNode();
         root.add(ts);
         root.add(fs);
         root.add(cc);
+        root.setExecutionType(INSISTENT);
+        trace = new Stack();
+        trace.push(root);
     }
     @Override
     public boolean isValid(TaskTree t){
-        t.traceNode(this);
-        foughtSinceEntrance = false;
+        //foughtSinceEntrance = false;
         c.log("Combat Tree Validated~~~~~~~~~~~~~");
+
         return true;
     }
     @Override
     public boolean isInvalid(TaskTree t){
-        if(phase == Phase.PREFIGHT && foughtSinceEntrance){
-            return true;
-        }
+        //return phase == Phase.PREFIGHT && foughtSinceEntrance;
         return false;
     }
     /*

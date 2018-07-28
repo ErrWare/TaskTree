@@ -9,7 +9,7 @@ public class TaskTree extends AbstractNode {
     protected LooperNode root;
     protected Stack<Node> trace;
 
-    public TaskTree(){}
+    public TaskTree(){c.log("TaskTree reached");}
 
     public boolean isValid( TaskTree y){return true;}
     //<editor-fold desc="isInvalid discussion">

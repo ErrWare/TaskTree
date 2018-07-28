@@ -13,6 +13,7 @@ public class LooperNode extends AbstractNode{
     //<editor-fold desc="Validation">
     @Override
     public boolean isValid(TaskTree t) {
+        setExecutionType(executionType);
         return true;
     }
 
@@ -36,14 +37,16 @@ public class LooperNode extends AbstractNode{
     private Node executingNode;
     public LooperNode(){
         nodes = new ArrayList();
+        executionType = NORMAL;
     }
     public LooperNode(ExecutionType type){
-        setExecutionType(type);
+        nodes = new ArrayList<>();
+        executionType = type;
     }
 
     @Override
     public int execute( TaskTree t) {
-
+        assert iterator != null;
         if (executionType == INSISTENT) {
             //<editor-fold desc="Insistent Execution">
             assert nextNode != null;
@@ -59,7 +62,7 @@ public class LooperNode extends AbstractNode{
             //</editor-fold>
         } else {
             //<editor-fold desc="Normal & Stateful Execution">
-            if(executionType==STATEFUL || !iterator.hasNext()) iterator = nodes.iterator();
+            if(executionType==NORMAL || !iterator.hasNext()) iterator = nodes.iterator();
             Node n;
             while(iterator.hasNext()) {
                 n = iterator.next();

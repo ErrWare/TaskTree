@@ -26,12 +26,9 @@ public class TargetSelection extends AbstractNode {
             if (monster != null) {
                 monster.interact("Attack");
                 targetIndex = monster.getIndex();
-            } else {
-                targetIndex = -1;
             }
         }
-        //return positive number if some npc targetted
-        return targetIndex;
+        return 400;
     }
     @Override
     public boolean isValid(TaskTree t){
@@ -46,6 +43,7 @@ public class TargetSelection extends AbstractNode {
         c.log("Invalidate pre 2: " + (targetIndex!=-1 ? "True" : "False") + "Target Index: " + targetIndex);
         if(targetIndex != -1) {
             NPC n = c.getNpcs().getLocalNPC(targetIndex);
+            ((CombatTree)t).updateTargetNPC(n);
             c.log("Invalidate npc == null? " + (n == null ? "True" : "False"));
             c.log("Invalidate pre 3: " + (!c.getNpcs().getLocalNPC(targetIndex).exists() ? "True" : "False"));
         }
