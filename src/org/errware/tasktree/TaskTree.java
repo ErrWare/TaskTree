@@ -5,22 +5,40 @@ import org.dreambot.api.methods.MethodContext;
 import java.util.ArrayList;
 import java.util.Stack;
 
-public abstract class TaskTree extends AbstractNode {
-    protected Node root;
+public class TaskTree extends AbstractNode {
+    protected LooperNode root;
     protected Stack<Node> trace;
+
+    public TaskTree(){}
+
+    public boolean isValid( TaskTree y){return true;}
+    //<editor-fold desc="isInvalid discussion">
+    /* isInvalid is probably the most important method to override, wondering what to make the default
+     * Option 1: false
+     *      Never unravel a TaskTree once it's been added to the trace
+     * Option 2: trace.peek() == root
+     *      Unravel a TaskTree if it is idle at the start of a single execution.
+     * Option 3?: trace.empty()
+     *      Unravel if the root node has been invalidated
+     *      makes root node's invalidity the invalidation condition
+     *      would mean isValid should push the root onto the trace before it returns true
+     * Option 4?: track how many times consecutively trace.peek() == root, invalidate after certain threshold
+     *      would be an ad hoc fix to option 2's impatience
+     */
+    //</editor-fold>
+    public boolean isInvalid( TaskTree y){return trace.peek() == root;}
+    public final int execute(){return this.execute(null);}
+
+    public int execute(TaskTree t){
+        invalidate();
+        return trace.peek().execute(this);  // pass this to claim ownership of called nodes
+    }
 
     protected ArrayList<Node> interruptHandler;
     protected void interrupt(int interruptCode){
         interruptHandler.get(interruptCode).execute(this);
     }
 
-    public TaskTree(){}
-
-    //I don't like having to make TaskTree have these parameters too but I see no other way...
-    public final int execute(){return this.execute(this);}
-    //both valid and invalid by default
-    public boolean validate(MethodContext x, TaskTree y){return true;}
-    public boolean invalidate(MethodContext x, TaskTree y){return true;}
 
     //Pass reference of tree down execution pipe
     //When a node is validated its parent adds it to the trace
@@ -30,7 +48,19 @@ public abstract class TaskTree extends AbstractNode {
     public void traceNode(Node n){
         trace.push(n);
     }
-    public Node untraceNode(){
+
+    //untraceNode now responsibility of TaskTree
+    private Node untraceNode(){
         return trace.pop();
+    }
+    // standard invalidation / trace unrolling
+    protected int invalidate(){
+        int totalInvalidated = 0;
+        while(trace.peek().isInvalid(this)) {
+            totalInvalidated++;
+            untraceNode();
+        }
+        c.log("Invalidated " + totalInvalidated);
+        return totalInvalidated;
     }
 }
