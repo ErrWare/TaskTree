@@ -1,3 +1,6 @@
 *.json
 .project
 *.iml
+MANIFEST.MF
+*.jar
+.idea
