@@ -7,10 +7,9 @@ import java.util.Stack;
 
 public class TaskTree extends AbstractNode {
     protected LooperNode root;
-    protected Stack<Node> trace;
+    protected Stack<AbstractNode> trace;
 
-    public TaskTree(){c.log("TaskTree reached");}
-
+    public TaskTree(){c.log("TaskTree reached");root = new LooperNode();trace=new Stack<>();}
     public boolean isValid( TaskTree y){return true;}
     //<editor-fold desc="isInvalid discussion">
     /* isInvalid is probably the most important method to override, wondering what to make the default
@@ -27,6 +26,12 @@ public class TaskTree extends AbstractNode {
      */
     //</editor-fold>
     public boolean isInvalid( TaskTree y){return trace.peek() == root;}
+
+    @Override
+    public void init(){
+        trace.push(root);
+        root.init();
+    }
     public final int execute(){return this.execute(null);}
 
     public int execute(TaskTree t){
@@ -45,12 +50,12 @@ public class TaskTree extends AbstractNode {
     //There has to be a better way, having this public is unsafe -
     //what if something from another tree decides to add itself to this trace
     //but maybe that would be cool??
-    public void traceNode(Node n){
+    public void traceNode(AbstractNode n){
         trace.push(n);
     }
 
     //untraceNode now responsibility of TaskTree
-    private Node untraceNode(){
+    private AbstractNode untraceNode(){
         return trace.pop();
     }
     // standard invalidation / trace unrolling

@@ -34,29 +34,16 @@ public class CombatTree extends TaskTree {
     //protected boolean foughtSinceEntrance;
 
     public CombatTree( Filter<NPC> f){
-        /*
-        enterCombat = new TargetSelection(f);
-        doCombat = new FightSequence();
-        exitCombat = new CombatCleanup();
-        */
-        //I don't like having to specify the execution type last
-        //fix it
-        root = new LooperNode();
+        root.setExecutionType(INSISTENT);
         root.add(new TargetSelection(f));
         root.add(new FightSequence());
         root.add(new CombatCleanup());
-        root.setExecutionType(INSISTENT);
-        trace = new Stack();
-        trace.push(root);
     }
     public CombatTree( TargetSelection ts, FightSequence fs, CombatCleanup cc){
-        root = new LooperNode();
+        root.setExecutionType(INSISTENT);
         root.add(ts);
         root.add(fs);
         root.add(cc);
-        root.setExecutionType(INSISTENT);
-        trace = new Stack();
-        trace.push(root);
     }
     @Override
     public boolean isValid(TaskTree t){
