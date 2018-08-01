@@ -65,7 +65,7 @@ public class LooperNode extends AbstractNode{
                 // set up nextnode to check
                 if(!iterator.hasNext()) iterator = nodes.iterator();
                 nextNode = iterator.next();
-
+                c.log("Now executing: " + executingNode.getClass() + " : " + executingNode.toString());
                 return executingNode.execute(t);
             }
             //</editor-fold>
