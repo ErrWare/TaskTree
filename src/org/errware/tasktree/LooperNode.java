@@ -14,6 +14,8 @@ public class LooperNode extends AbstractNode{
     @Override
     public void init(){
         iterator = nodes.iterator();
+        if(executionType == INSISTENT)
+            nextNode = iterator.next();
         for(AbstractNode n: nodes)
             n.init();
     }
@@ -55,7 +57,7 @@ public class LooperNode extends AbstractNode{
     public int execute( TaskTree t) {
         assert iterator != null;
         if (executionType == INSISTENT) {
-            //<editor-fold desc="Insistent Execution">
+            //<editor-fold desc="Insistent Execution">;
             assert nextNode != null;
             if(validate(nextNode, t)){
                 // set up node for execution
