@@ -6,6 +6,7 @@ import org.errware.tasktree.TaskTree;
 import java.util.Iterator;
 import java.util.List;
 
+// NORMAL:   executes first valid child in list
 public class LooperBehaviourNormal extends LooperBehaviour{
     public LooperBehaviourNormal(List<AbstractNode> nodes){
         super(nodes);

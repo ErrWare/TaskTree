@@ -6,6 +6,7 @@ import org.errware.tasktree.TaskTree;
 import java.util.Iterator;
 import java.util.List;
 
+// INSITENT: every subnode must execute in order, implies stateful
 public class LooperBehaviourInsistent extends LooperBehaviour{
     private Iterator<AbstractNode> iterator;
     //For insistent execution

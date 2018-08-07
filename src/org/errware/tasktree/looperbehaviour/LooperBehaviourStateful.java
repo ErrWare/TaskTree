@@ -6,6 +6,7 @@ import org.errware.tasktree.TaskTree;
 import java.util.Iterator;
 import java.util.List;
 
+// STATEFUL: like normal but continues child validation after previously validated child
 public class LooperBehaviourStateful extends LooperBehaviour{
     private Iterator<AbstractNode> iterator;
     public LooperBehaviourStateful(List<AbstractNode> nodes){
