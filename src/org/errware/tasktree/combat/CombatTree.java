@@ -22,12 +22,7 @@ public class CombatTree extends TaskTree {
     public CombatTree(){ root = new LooperNode(INSISTENT); }
 
     public CombatTree( Filter<NPC> f){
-        try {
-            root.setExecutionType(INSISTENT);
-        }
-        catch(NoSuchElementException e){
-            c.log("NSE Exception caught");
-        }
+        root.setExecutionType(INSISTENT);
         root.add(new TargetSelection(f));
         root.add(new FightSequence());
         root.add(new CombatCleanup());

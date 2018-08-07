@@ -55,6 +55,5 @@ public class LooperNode extends AbstractNode{
                 myBehaviour = new LooperBehaviourNormal(nodes);
                 break;
         }
-        myBehaviour.init();
     }
 }
