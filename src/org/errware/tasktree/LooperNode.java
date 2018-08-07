@@ -1,9 +1,6 @@
 package org.errware.tasktree;
 
-import org.errware.tasktree.looperbehaviour.LooperBehaviour;
-import org.errware.tasktree.looperbehaviour.LooperBehaviourInsistent;
-import org.errware.tasktree.looperbehaviour.LooperBehaviourNormal;
-import org.errware.tasktree.looperbehaviour.LooperBehaviourStateful;
+import org.errware.tasktree.looperbehaviour.*;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -27,7 +24,7 @@ public class LooperNode extends AbstractNode{
 
     public enum ExecutionType { NORMAL, STATEFUL, INSISTENT }
     private LooperBehaviour myBehaviour;
-    
+
     private List<AbstractNode> nodes;          //could've used polymorphism to allow unspecified iterable type
 
     public LooperNode(){
