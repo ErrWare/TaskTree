@@ -37,7 +37,6 @@ public class LooperNode extends AbstractNode{
     //</editor-fold>
     ExecutionType executionType = NORMAL;
     private List<AbstractNode> nodes;          //could've used polymorphism to allow unspecified iterable type
-
     protected Iterator<AbstractNode> iterator;      //instead kept initial release simple - show how to make a generic type
     //For insistent execution
     private AbstractNode nextNode;
