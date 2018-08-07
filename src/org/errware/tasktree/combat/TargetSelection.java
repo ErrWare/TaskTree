@@ -20,8 +20,8 @@ public class TargetSelection extends AbstractNode {
 
     @Override
     public int execute(TaskTree t) {
-        c.log("Prefight executed: " + !c.getLocalPlayer().isMoving());
-        NPC targetNpc = c.getNpcs().getLocalNPC(targetIndex);
+        c.log("Prefight check");
+        NPC targetNpc = targetIndex==-1 ? null : c.getNpcs().getLocalNPC(targetIndex);
         // If I'm not moving or my target is interacting with someone else
         if(!c.getLocalPlayer().isMoving() || (targetNpc != null && targetNpc.getInteractingIndex() != myIndex && targetNpc.getInteractingIndex() != -1 )) {
             // first check for NPC interacting with me
