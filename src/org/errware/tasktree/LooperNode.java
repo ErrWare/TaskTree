@@ -3,6 +3,7 @@ package org.errware.tasktree;
 import org.errware.tasktree.looperbehaviour.*;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import static org.errware.tasktree.LooperNode.ExecutionType.*;
@@ -31,8 +32,9 @@ public class LooperNode extends AbstractNode{
         nodes = new ArrayList<>();
         setExecutionType(NORMAL);
     }
-    public LooperNode(ExecutionType type){
-        nodes = new ArrayList<>();
+    public LooperNode(ExecutionType type, AbstractNode... newNodes){
+        nodes = new ArrayList<AbstractNode>();
+        nodes.addAll(Arrays.asList(newNodes));
         setExecutionType(type);
     }
 
@@ -41,8 +43,12 @@ public class LooperNode extends AbstractNode{
         return myBehaviour.execute(t);
     }
 
-    public void add(AbstractNode n){nodes.add(n);}
+    public void add(AbstractNode... newNodes){
+        for(AbstractNode n : newNodes)
+            nodes.add(n);
+    }
 
+    //Should move this to a factory somewhere somehow
     public void setExecutionType(ExecutionType newMode) {
         switch(newMode){
             case STATEFUL:
