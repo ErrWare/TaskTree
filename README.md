@@ -25,10 +25,17 @@ More on tree traversal – the default:
 1. Tree instantiated – the root node of the tree is pushed onto the trace stack.
 
 ____ 1.1. Top most tree is initialized with public void init(). This recursively initializes the subtrees.
+
 2. Tree execution step:
+
 ____ 2.1. If the node on the top of the stack meets its invalidate (post) condition pop it off the stack, repeat until a node is not popped. If stack is empty the task is completely done and the root node has been popped for some reason.
+
 ____ 2.2. Execute the node on the top of the stack
+
 3. Logic Node execution step:
+
 ____ 3.1. Iterate through subtree roots checking for node validity. If node is valid add it onto the             calling tree’s trace stack then execute it. If no subtree nodes are valid do nothing.
+
 4. ? extends AbstractNode execution step:
+
 ____ 4.1. Whatever you make it. This is where actuation is supposed to go.
