@@ -1,10 +1,14 @@
 package org.errware.tasktree.combat;
 
+import org.dreambot.api.methods.MethodContext;
 import org.dreambot.api.methods.filter.Filter;
 import org.dreambot.api.methods.interactive.NPCs;
+import org.dreambot.api.methods.map.Map;
 import org.dreambot.api.wrappers.interactive.NPC;
 import org.errware.tasktree.AbstractNode;
 import org.errware.tasktree.TaskTree;
+
+import java.util.function.Predicate;
 
 //exists is false when npc dead
 //realID is 0 when npc dead
@@ -17,7 +21,8 @@ public class TargetSelection extends AbstractNode {
     public TargetSelection(Filter<NPC> f){
         npcFilter = f;
     }
-
+    private Map map;
+    public final Predicate<NPC> available = n -> n != null && (n.getInteractingIndex() == myIndex || n.getInteractingIndex() == -1) && map.canReach(n);
     @Override
     public int execute(TaskTree t) {
         c.log("Prefight check");
@@ -30,7 +35,9 @@ public class TargetSelection extends AbstractNode {
             // if none found get closest one by filter
             if(monster == null) {
                 c.log("no monster interacting with me");
-                monster = npcs.closest(npcFilter);
+                // get closest available monster matching filter
+                // :: is a way to reference a specific method, sort of like obj.method without the calling ()
+                monster = npcs.closest(available.and(npcFilter::match)::test);
             }
             //c.log("Monster null?: " + (monster==null ? "True" : "False"));
             //c.log("Monster closest: " + monster.toString());
@@ -38,6 +45,7 @@ public class TargetSelection extends AbstractNode {
                 c.log("Attacking");
                 monster.interact("Attack");
                 targetIndex = monster.getIndex();
+
             }
         }
         return 400;
@@ -45,6 +53,7 @@ public class TargetSelection extends AbstractNode {
     @Override
     public boolean isValid(TaskTree t){
         myIndex = c.getLocalPlayer().getIndex();
+        map = new Map(c.getClient());
         return true;
     }
 
