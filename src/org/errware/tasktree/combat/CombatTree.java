@@ -33,6 +33,7 @@ public class CombatTree extends TaskTree {
         root.add(fs);
         root.add(cc);
     }
+    /*
     @Override
     public boolean isValid(TaskTree t){
         //foughtSinceEntrance = false;
@@ -45,4 +46,5 @@ public class CombatTree extends TaskTree {
         //return phase == Phase.PREFIGHT && foughtSinceEntrance;
         return false;
     }
+    */
 }

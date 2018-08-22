@@ -16,13 +16,14 @@ public class LooperNode extends AbstractNode{
         for(AbstractNode n: nodes)
             n.init();
     }
+    /*
     @Override
     public boolean isValid(TaskTree t) {
         return true;
     }
     @Override
     public boolean isInvalid(TaskTree t) { return false; }
-
+    */
     public enum ExecutionType { NORMAL, STATEFUL, INSISTENT }
     private LooperBehaviour myBehaviour;
 

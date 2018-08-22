@@ -9,11 +9,24 @@ public abstract class AbstractNode implements Node {
     public static void setContext(MethodContext _c){c = _c;}
     public static MethodContext getContext(){return c;}
     public void init(){}
-    
-    protected Predicate<MethodContext> validityPred;
-    protected Predicate<MethodContext> invalidityPred;
-    protected abstract void onValid();
-    protected abstract void onInvalid();
+
+    protected Predicate<MethodContext> validityPred = c -> false;
+    protected Predicate<MethodContext> invalidityPred = c -> true;
+    protected void onValid(){}
+    protected void onInvalid(){}
+    protected AbstractNode(){};
+    protected AbstractNode(Predicate<MethodContext> vP, Predicate<MethodContext> iP){
+        setValidityPred(vP);
+        setInvalidityPred(iP);
+    }
+    protected void setValidityPred(Predicate<MethodContext> vP){
+        if (vP != null)
+            validityPred = vP;
+    }
+    protected void setInvalidityPred(Predicate<MethodContext> iP){
+        if (iP != null)
+            invalidityPred = iP;
+    }
     @Override
     public final boolean isValid(TaskTree t){
         if(validityPred.test(c)){

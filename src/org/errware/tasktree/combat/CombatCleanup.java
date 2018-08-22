@@ -9,13 +9,5 @@ public class CombatCleanup extends AbstractNode {
         return 0;
     }
 
-    @Override
-    public boolean isValid(TaskTree taskTree) {
-        return true;
-    }
-
-    @Override
-    public boolean isInvalid(TaskTree taskTree) {
-        return true;
-    }
+    public CombatCleanup(){super(mc -> true, mc -> true);}
 }

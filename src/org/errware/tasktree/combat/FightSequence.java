@@ -9,6 +9,7 @@ public class FightSequence extends AbstractNode {
         return 1000;
     }
 
+    /*
     @Override
     public boolean isValid(TaskTree t) {
         return true;
@@ -19,4 +20,5 @@ public class FightSequence extends AbstractNode {
         //isInvalid if target dead or out of combat
         return !((CombatTree)t).getTargetNPC().exists() || !c.getLocalPlayer().isInCombat();
     }
+    */
 }

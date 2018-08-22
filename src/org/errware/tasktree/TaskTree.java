@@ -9,8 +9,14 @@ public class TaskTree extends AbstractNode {
     protected LooperNode root;
     protected Stack<AbstractNode> trace;
 
-    public TaskTree(){c.log("TaskTree reached");root = new LooperNode();trace=new Stack<>();}
-    public boolean isValid( TaskTree y){return true;}
+    public TaskTree(){
+        super();
+        //setValidityPred(null);
+        c.log("TaskTree reached");
+        root = new LooperNode();
+        trace=new Stack<>();
+    }
+    //public boolean isValid( TaskTree y){return true;}
     //<editor-fold desc="isInvalid discussion">
     /* isInvalid is probably the most important method to override, wondering what to make the default
      * Option 1: false
@@ -25,7 +31,7 @@ public class TaskTree extends AbstractNode {
      *      would be an ad hoc fix to option 2's impatience
      */
     //</editor-fold>
-    public boolean isInvalid( TaskTree y){return trace.peek() == root;}
+    //public boolean isInvalid( TaskTree y){return trace.peek() == root;}
 
     @Override
     public void init(){
@@ -39,10 +45,11 @@ public class TaskTree extends AbstractNode {
         return trace.peek().execute(this);  // pass this to claim ownership of called nodes
     }
 
+    /*
     protected ArrayList<Node> interruptHandler;
     protected void interrupt(int interruptCode){
         interruptHandler.get(interruptCode).execute(this);
-    }
+    }*/
 
 
     //Pass reference of tree down execution pipe

@@ -50,6 +50,7 @@ public class TargetSelection extends AbstractNode {
         }
         return 400;
     }
+    /*
     @Override
     public boolean isValid(TaskTree t){
         myIndex = c.getLocalPlayer().getIndex();
@@ -74,4 +75,5 @@ public class TargetSelection extends AbstractNode {
         //assumes single combat for now
         return n != null && n.isInteracting(c.getLocalPlayer());//c.getLocalPlayer().isInCombat() || (targetIndex!=-1 && !c.getNpcs().getLocalNPC(targetIndex).exists());
     }
+    */
 }
