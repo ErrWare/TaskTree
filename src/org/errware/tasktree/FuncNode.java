@@ -10,12 +10,34 @@ import org.dreambot.api.methods.MethodContext;
 public class FuncNode extends AbstractNode {
 	private Predicate<MethodContext> validityPred = mc -> true
 			, invalidityPred = mc -> true;
-	private ToIntFunction<MethodContext> exe;
+	private ToIntFunction<MethodContext> executable = mc -> 1000;
 	
+	public FuncNode(Predicate<MethodContext> vP, Predicate<MethodContext> iP) {
+		setValidityPred(vP);
+		setInvalidityPred(iP);
+	}
+	public FuncNode(Predicate<MethodContext> vP, Predicate<MethodContext> iP,
+			ToIntFunction<MethodContext> exe ) {
+		setValidityPred(vP);
+		setInvalidityPred(iP);
+		setExecutable(exe);
+	}
+	private void setValidityPred(Predicate<MethodContext> vP) {
+		if(vP != null)
+			validityPred = vP;
+	}
+	private void setInvalidityPred(Predicate<MethodContext> iP) {
+		if(iP != null)
+			invalidityPred = iP;
+	}
+	private void setExecutable(ToIntFunction<MethodContext> exe) {
+		if(executable != null)
+			executable = exe;
+	}
 	
 	@Override
 	public final int execute(TaskTree t) {
-		return exe.applyAsInt(c);
+		return executable.applyAsInt(c);
 	}
 
 	@Override
