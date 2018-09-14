@@ -1,6 +1,14 @@
 # TaskTree
 Architecture for decision making. Implemented in Java
 
+# Summary
+
+TaskTrees organize the logic and execution of tasks. They turn real time decision making into turns, with turns of variable lengths of time.
+The tree maintains a stack of the current path from the root to the last executed node. At the beginning of each turn nodes are popped off the stack if their pop condition is met. Then nodes are explored in a greedy depth-first manner, being pushed onto the stack if their push condition is met. This exploration halts when no more nodes are pushed and a value representing the length of the turn is returned.
+Thus inner nodes are meant to act as gating mechanisms into and out of their subtrees and leaf nodes are meant to represent actions. There is no hard and fast rule that guarantees this in the framework, it is up to the user to decide how to implement each node. Basic functionality for this convention is provided, allowing convenient tree building with anonymous nodes.
+
+# Description
+
 Decision Trees manage the execution of high level tasks. Each task is recursively broken down into subtasks handled by subtrees. These trees are explored in a greedy, optionally stateful, Depth First manner. To enter a subtree the root node of the tree must be validated according to some defined precondition. To exit a subtree the root node must be re-reached (perhaps after exploration of subtrees) and the defined invalidation/post-condition must be satisfied.
 
 Everything, including the High-Level managing Decision Trees, are subclasses of the Node type. This allows everything to be considered a task through polymorphism and enables it to be reused in another task. In this particular domain/implementation everything subclasses AbstractNode which offers a convenient location to store an oft used static variable.
