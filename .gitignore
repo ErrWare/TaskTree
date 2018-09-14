@@ -4,3 +4,5 @@
 MANIFEST.MF
 *.jar
 .idea
+/bin/
+.classpath
