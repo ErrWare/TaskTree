@@ -3,7 +3,7 @@ Architecture for decision making. Implemented in Java
 
 # Summary
 
-TaskTrees organize the logic and execution of tasks. They turn real time decision making into turns, with turns of variable lengths of time.
+TaskTrees organize the logic and execution of tasks. They turn real time decision making into turns, with turns of variable lengths of time.</br>
 The tree maintains a stack of the current path from the root to the last executed node. At the beginning of each turn nodes are popped off the stack if their pop condition is met. Then nodes are explored in a greedy depth-first manner, being pushed onto the stack if their push condition is met. This exploration halts when no more nodes are pushed and a value representing the length of the turn is returned.
 Thus inner nodes are meant to act as gating mechanisms into and out of their subtrees and leaf nodes are meant to represent actions. There is no hard and fast rule that guarantees this in the framework, it is up to the user to decide how to implement each node. Basic functionality for this convention is provided, allowing convenient tree building with anonymous nodes.
 
