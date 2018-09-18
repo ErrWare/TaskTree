@@ -50,6 +50,6 @@ ____ 4.1. Whatever you make it. This is where actuation is supposed to go.
 
 # Note
 
-currently broken
+currently broken</br>
 TODO: Revert AbstractNode to be abstract</br>
 TODO: make TemplateNode implementing the algorithm pattern (as AbstractNode does rn)
