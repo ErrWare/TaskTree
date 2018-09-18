@@ -47,3 +47,9 @@ ____ 3.1. Iterate through subtree roots checking for node validity. If node is v
 4. ? extends AbstractNode execution step:
 
 ____ 4.1. Whatever you make it. This is where actuation is supposed to go.
+
+#Note
+
+currently broken
+TODO: Revert AbstractNode to be abstract</br>
+TODO: make TemplateNode implementing the algorithm pattern (as AbstractNode does rn)
