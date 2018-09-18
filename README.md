@@ -48,7 +48,7 @@ ____ 3.1. Iterate through subtree roots checking for node validity. If node is v
 
 ____ 4.1. Whatever you make it. This is where actuation is supposed to go.
 
-#Note
+# Note
 
 currently broken
 TODO: Revert AbstractNode to be abstract</br>
