@@ -1,5 +1,5 @@
 # TaskTree
-Architecture for decision making encouraging modular design and reuse via the Composite Design Pattern. Implemented in Java
+Framework for decision making encouraging modular design and reuse via the Composite Design Pattern. Implemented in Java
 
 # Summary
 
